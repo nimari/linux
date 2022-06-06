@@ -1,0 +1,72 @@
+## Access Controls التحكم في الوصول
+
+- Access Control Models - طُرُق التحكم في الوصول 
+	- **DAC** ( **D**iscretionary **A**ccess **C**ontrol )
+	- **MAC** ( **M**andatory **A**ccess **C**ontrol )
+	- Rule Based Access Control
+		- Access Allowed from 8:00 to 17:00 PM
+	- **RBAC** ( **R**ole **B**ased **A**ccess **C**ontrols ) 
+		- Non Discretionary
+	- Identity Based Access Control
+		- Login - Fingerprint - Facial Recognition
+	- **CBAC** ( **C**ontent **B**ased **A**ccess **C**ontrol )
+	- **ABAC** ( **A**ttribute **B**ased **A**ccess **C**ontrol)
+---
+## SELinux 
+- SELinux ( **S**ecurity **E**nhanced **Linux** )
+- A Linux Kernel Module
+- SELinux Modes : **/etc/selinux/config**
+	- SELINUX=disabled ( Turned Off )
+	- SELINUX=permissive ( Allow But Log: avc )
+	- SELINUX=enforcing ( Enforce Policy )
+---
+- SELinux Policy : **/etc/selinux/config**
+	- SELINUXTYPE=default, targeted
+		- **types** apply to objects 
+		- **domains** apply to processes
+		- targeted -> run in **confined** domain
+		- non targeted -> run in **unconfined** domain
+			- Policy applied but allow everything
+	- SELINUXTYPE=mls
+	- SELINUXTYPE=custom
+---
+- SELinux Forms of Access Control :
+	- **T**ype **E**nforcement ( **TE** )
+	- **R**ole-**B**ased **A**ccess **C**ontrol ( **RBAC** )
+	- **M**ulti-**L**evel **S**ecurity ( **MLS** )
+---
+- Selinux Security Context
+	- Example : ( user:role:type:level ) 
+		- system_u:object_r:net_conf_t:s0
+	- can be instantiated by creating **/.autorelabel**
+	- ls -Z ( To see File Context )
+	- ps -efZ ( To See Proccess Context )
+	- id -Z ( To See User Context )
+
+---
+
+- **SELinux Commands:**
+	- ls -Z /etc/passwd.   // displays the context of the file
+	- ps -Z 
+	- id -Z
+    - sestatus
+    - seinfo
+	- getenforce
+    - setenforce
+    - sesearch ( Searcch rules )
+    - getsebool
+    - allow staff_t etc_t:file { open read getattr ioctl lock };
+    - sealert : query selinux logs in /var/log/auditd/
+    - chcon : Changes context of a file, Writes to the File System NOT to the Policy
+    - restorecon /etc/shadow : reads the context from the policy file and writes it.
+    - audit2allow
+    - semanage
+	- GUIs
+		- apol ( Read and analyze policy files )
+		- seaudit ( Read and analyse audit logs )
+---
+
+## Resources
+- [Using MLS Security](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/using_selinux/using-multi-level-security-mls_using-selinux)
+- [Building and Loading SELinux Policies](https://www.youtube.com/watch?v=A6yk-7MJgec)
+- man selinux
